@@ -1,3 +1,4 @@
+import webbrowser
 from prettytable import PrettyTable
 
 class Token:
@@ -12,7 +13,7 @@ class Token:
 
 class Error:
     def __init__(self, descripcion : str, fila : int, columna : int):
-        self.descripcionError = descripcion
+        self.descripcion = descripcion
         self.fila = fila
         self.columna = columna
 
@@ -304,6 +305,154 @@ class clasificacion:
 
 class Reportes:
     def reporteTokens(self, tokens):
-        pass
+
+        html = """<!doctype html>
+<html lang="en">
+  <head>
+  	<title>Reporte de Tokens</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+	<link rel="stylesheet" href="table-07\css\style.css">
+
+	</head>
+	<body>
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<h2 class="heading-section">Reporte de Tokens</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="table-wrap">
+						<table class="table table-bordered table-dark table-hover">
+						  <thead>
+						    <tr>
+						      <th>Lexema</th>
+						      <th>Línea</th>
+						      <th>Columna</th>
+						      <th>Tipo</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+        """
+        for token in tokens:
+            html += """
+						    <tr>
+						      <th scope="row">""" + token.lexema + """</th>
+						      <td>""" + str(token.fila) + """</td>
+						      <td>""" + str(token.columna) + """</td>
+						      <td>""" + token.tipo + """</td>
+						    </tr>"""
+        html += """
+						  </tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script src="js/jquery.min.js"></script>
+  <script src="js/popper.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+
+	</body>
+</html>
+
+	<script src="js/jquery.min.js"></script>
+  <script src="js/popper.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+
+	</body>
+</html>
+        
+        """
+        open('Reporte_Tokens.html', 'w').write(html)
+        webbrowser.open('Reporte_Tokens.html')
+        print("Reporte de tokens impreso")
+        
+
     def reporteErrores(self, errores):
-        pass
+        html = """<!doctype html>
+<html lang="en">
+  <head>
+  	<title>Reporte de Tokens</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+	<link rel="stylesheet" href="table-07\css\style.css">
+
+	</head>
+	<body>
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<h2 class="heading-section">Reporte de Tokens</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="table-wrap">
+						<table class="table table-bordered table-dark table-hover">
+						  <thead>
+						    <tr>
+						      <th>Descripcion</th>
+						      <th>Linea</th>
+						      <th>Columna</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+        """
+        for error in errores:
+            html += """
+						    <tr>
+						      <th scope="row">""" + error.descripcion + """</th>
+						      <td>""" + str(error.fila) + """</td>
+						      <td>""" + str(error.columna) + """</td>
+						    </tr>"""
+        html += """
+						  </tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script src="js/jquery.min.js"></script>
+  <script src="js/popper.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+
+	</body>
+</html>
+
+	<script src="js/jquery.min.js"></script>
+  <script src="js/popper.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+
+	</body>
+</html>
+        
+        """
+        open('Reporte_Errores.html', 'w').write(html)
+        webbrowser.open('Reporte_Errores.html')
+        print("Reporte de errores impreso")
+
+
+#
