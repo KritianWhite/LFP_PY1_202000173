@@ -1,3 +1,4 @@
+from inspect import isframe
 import webbrowser
 from prettytable import PrettyTable
 
@@ -222,7 +223,7 @@ class analizadorLexico:
         x.field_names = ["Lexema", "linea", "columna", "tipo"]
         for token in self.listaTokens:
             x.add_row([token.lexema, token.fila, token.columna, token.tipo])
-        print('hola')
+        #print('hola')
         print(x)
 
     def imprimirErrores(self):
@@ -455,4 +456,249 @@ class Reportes:
         print("Reporte de errores impreso")
 
 
-#
+
+class Formulario:
+    def __init__(self):
+        self.texto = 0
+        self.seleccion = 0
+        self.radio = 0
+        self.obtenerTexto = ''
+        self.radioSelect = ''
+        self.obtenerListado = ''
+
+    def mostrariframe(self, componente):
+        iframe = self.inicio()
+        for cmp in componente:
+            if cmp['tipo'] == 'etiqueta':
+                iframe += self.textoValor(cmp)
+            elif cmp['tipo'] == 'texto':
+                iframe += self.inputText(cmp)
+            elif cmp['tipo'] == 'grupo-radio':
+                iframe += self.Grupo_Radio(cmp)
+            elif cmp['tipo'] == 'grupo-option':
+                iframe += self.Grupo_Option(cmp)
+            elif cmp['tipo'] == 'boton':
+                iframe += self.Boton(cmp)
+        
+        iframe += self.fin()
+
+        open('Formulario iframe.html', 'w').write(iframe)
+        webbrowser.open('Formulario iframe.html')
+        print('Se mostrará el formulario iframe.')
+
+    def Boton(self, diccionario):
+        iframe = """
+                    <div class="container-contact100-form-btn">
+					<button class="contact100-form-btn">
+						<span>""" + self.llave(diccionario) + """<i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
+						</span>
+					</button>
+				</div>
+        """
+        return iframe
+    
+    def Grupo_Option(self, diccionario):
+        self.seleccion += 1
+        iframe = """
+                    <div class="wrap-input100 input100-select bg1">
+					    <span class="label-input100">""" + self.llave(diccionario) + """</span>
+					    <div>
+						    <select id=\"opciones""" + str(self.seleccion) + """\" class="js-select2" name="service">
+                            <option disabled selected>Elija una opcion *</option>
+                            """ + self.opciones(diccionario['valores']) + """
+                            </select>
+						    <div class="dropDownSelect2"></div>
+					    </div>
+				    </div>
+        """
+        return iframe
+
+    def opciones(self, listaOpciones):
+        iframe = ''
+        for x in listaOpciones:
+            iframe +="""
+                        <option>""" + x + """</option>
+            """
+        return iframe
+
+    def Grupo_Radio(self, diccionario):
+        self.radio += 1
+        iframe = """
+                <div class="wrap-contact100-form-radio">
+					<span class="label-input100">""" + self.llave(diccionario) + """</span>
+                    """ + self.radios(diccionario['valores']) +"""
+				</div>
+        """
+        return iframe
+    
+    def radios(self, listaRadios):
+        iframe = ''
+        for rad in listaRadios:
+            iframe += """
+                        <div class="contact100-form-radio">
+						    <input class="input-radio100" id=\"radio1""" + rad + """\" type="radio" name="type-product" value="digital" checked="checked">
+						    <label class="label-radio100" for="radio1">""" + rad +"""</label>
+					    </div>  
+            """
+        return iframe
+    
+    def inputText(self, diccionario):
+        self.texto += 1
+        iframe = """
+                    <div class="wrap-input100 validate-input bg1" data-validate="Ingrese un nombre válido">
+                    """ + str(self.textoValor(diccionario['valor'])) + """
+					    <input class="input100" type="text" name="name" placeholder=\"""" + self.fondoInput(diccionario) + """\">
+				    </div>
+        """
+        return iframe
+
+    def llave(self, diccionario):
+        for llave in diccionario:
+            if llave == 'valor':
+                return diccionario['valor']
+        return ''
+
+    def fondoInput(self, diccionario):
+        for llave in diccionario:
+            if llave == 'fondo':
+                return diccionario['fondo']
+        return ''
+
+    def textoValor(self, diccionario):
+        iframe = """
+					    <span class="label-input100">""" + self.llave(diccionario) + """</span>
+        """
+        return iframe
+    
+    def inicio(self):
+        iframe = """
+                    <!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>iframe</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="ContactFrom_v5\images\icons\\favicon.ico"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="ContactFrom_v5\\vendor\\bootstrap\css\\bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="ContactFrom_v5\\fonts\\font-awesome-4.7.0\css\\font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="ContactFrom_v5\\fonts\iconic\css\material-design-iconic-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="ContactFrom_v5\\vendor\\animate\\animate.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="ContactFrom_v5\\vendor\css-hamburgers\hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="ContactFrom_v5\\vendor\\animsition\css\\animsition.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="ContactFrom_v5\\vendor\select2\select2.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="ContactFrom_v5\\vendor\daterangepicker\daterangepicker.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="ContactFrom_v5\\vendor\\noui\\nouislider.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="ContactFrom_v5\css\\util.css">
+	<link rel="stylesheet" type="text/css" href="ContactFrom_v5\css\main.css">
+<!--===============================================================================================-->
+</head>
+<body>
+
+
+	<div class="container-contact100" id="iframe">
+		<div class="wrap-contact100">
+			<form class="contact100-form validate-form">
+            <span class="contact100-form-title" id ="iframe">
+				i-Frame
+			</span>
+            """
+
+        return iframe
+    
+    def fin(self):
+        iframe = """
+                    </form>
+		</div>
+	</div>
+
+
+
+<!--===============================================================================================-->
+	<script src="ContactFrom_v5\\vendor\jquery\jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="ContactFrom_v5\\vendor\\animsition\js\\animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="ContactFrom_v5\\vendor\\bootstrap\js\popper.js"></script>
+	<script src="ContactFrom_v5\\vendor\\bootstrap\js\\bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="ContactFrom_v5\\vendor\select2\select2.min.js"></script>
+	<script>
+		$(".js-select2").each(function(){
+			$(this).select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $(this).next('.dropDownSelect2')
+			});
+
+
+			$(".js-select2").each(function(){
+				$(this).on('select2:close', function (e){
+					if($(this).val() == "Please chooses") {
+						$('.js-show-service').slideUp();
+					}
+					else {
+						$('.js-show-service').slideUp();
+						$('.js-show-service').slideDown();
+					}
+				});
+			});
+		})
+	</script>
+<!--===============================================================================================-->
+	<script src="ContactFrom_v5\\vendor\daterangepicker\moment.min.js"></script>
+	<script src="ContactFrom_v5\\vendor\daterangepicker\daterangepicker.js"></script>
+<!--===============================================================================================-->
+	<script src="ContactFrom_v5\\vendor\countdowntime\countdowntime.js"></script>
+<!--===============================================================================================-->
+	<script src="ContactFrom_v5\\vendor\\noui\\nouislider.min.js"></script>
+	<script>
+	    var filterBar = document.getElementById('filter-bar');
+
+	    noUiSlider.create(filterBar, {
+	        start: [ 1500, 3900 ],
+	        connect: true,
+	        range: {
+	            'min': 1500,
+	            'max': 7500
+	        }
+	    });
+
+	    var skipValues = [
+	    document.getElementById('value-lower'),
+	    document.getElementById('value-upper')
+	    ];
+
+	    filterBar.noUiSlider.on('update', function( values, handle ) {
+	        skipValues[handle].innerHTML = Math.round(values[handle]);
+	        $('.contact100-form-range-value input[name="from-value"]').val($('#value-lower').html());
+	        $('.contact100-form-range-value input[name="to-value"]').val($('#value-upper').html());
+	    });
+	</script>
+<!--===============================================================================================-->
+	<script src="ContactFrom_v5\js\main.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-23581568-13');
+</script>
+
+</body>
+</html>
+                """
+        return iframe
+

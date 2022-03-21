@@ -1,6 +1,7 @@
+from ast import For
 import tkinter as tk
 from tkinter.filedialog import askopenfilename
-from analizadorLexico import analizadorLexico, clasificacion, Reportes
+from analizadorLexico import analizadorLexico, clasificacion, Reportes, Formulario
 
 
 class ventana:
@@ -13,12 +14,12 @@ class ventana:
         self.principal.config(bg='#0d83a3')
         self.editorTexto = tk.Text(self.principal, font=('Arial', 14), width=70, height=21, borderwidth=7, fg='#000000')
         self.editorTexto.place(x=50, y=100)
-        tk.Label(self.principal, text='VENTANA PRINCIPAL', background='#000000', foreground='white')
+        tk.Label(self.principal, text='VENTANA PRINCIPAL', font=("Helvetica", "32"), background='#000000', foreground='white').place(x=400, y=30)
         
         '''-------------------------BOTONES--------------------------'''
         tk.Button(self.principal, text='Cargar archivo', width=15, height=3, borderwidth=5, bg='#961823', fg='black', command=self.cargarArchivo).place(x=50, y=600)
         tk.Button(self.principal, text='Analizar', width=15, height=3, borderwidth=5, bg='#ba8013', fg='black', command=self.analizarArchivo).place(x=200, y=600)
-        #tk.Button(self.principal, text='Guardar cambios', width=15, height=3, borderwidth=5, bg='#28eb4c', fg='black').place(x=350, y=600)
+        tk.Button(self.principal, text='i-Frame', width=15, height=3, borderwidth=5, bg='#28eb4c', fg='black', command=self.iFrame).place(x=350, y=600)
 
         tk.Button(self.principal, text='Reporte de tokens', width=15, height=3, borderwidth=5, bg='#143b73', fg='black', command=self.mostrarReporteTokens).place(x=880, y=100)
         tk.Button(self.principal, text='Reporte de errores', width=15, height=3, borderwidth=5, bg='#143b73', fg='black', command=self.mostrarReporteErrores).place(x=1080, y=100)
@@ -53,7 +54,29 @@ class ventana:
                 tk.messagebox.showinfo(message="No se detectó ningún token.", title="Error")
         else:
             tk.messagebox.showinfo(message="No se ha cargado ningún archivo.", title="Error")
-    
+        
+    def iFrame(self):
+        try:
+            archivo = self.editorTexto.get('1.0', 'end').strip()
+            if len(archivo) > 0:
+                analizador = analizadorLexico()
+                analizador.analizar(archivo)
+                self.tokens = analizador.listaTokens
+                self.errores = analizador.listaErrores
+                if len(self.tokens) > 0:
+                    componente = clasificacion()
+                    componentes = componente.obtenerComponentes(self.tokens)
+                    Formulario().mostrariframe(componentes)
+                    print(componentes)
+                    tk.messagebox.showinfo(message="Se creó el iFrame correctamente.", title="Éxito")
+                else:
+                    tk.messagebox.showinfo(message="No se detectó ningún token.", title="Error")
+            else:
+                tk.messagebox.showinfo(message="No se ha cargado ningún archivo.", title="Error")
+        except:
+            print('Ocurrió algun error')
+            tk.messagebox.showinfo(message="Ocurrió algún error", title="Error")
+
     def mostrarReporteTokens(self):
         contenido = self.editorTexto.get('1.0','end').strip()
         if len(contenido) > 0:
